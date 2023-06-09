@@ -8505,3 +8505,57 @@
 	<cmath>
 	"geometry.h"
 
+1686311885 source:p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\src\animation.cpp
+	"animation.h"
+
+1686311878 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\animation.h
+	"geometry.h"
+
+1686311878 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\geometry.h
+	<iostream>
+
+1686311885 source:p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\src\forms.cpp
+	<cmath>
+	<SDL2/SDL_opengl.h>
+	<GL/GLU.h>
+	"forms.h"
+
+1686311869 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\sdl_opengl.h
+	"SDL_config.h"
+	"gl_mangle.h"
+	<windows.h>
+	"SDL_opengl_glext.h"
+
+1686311864 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\sdl_config.h
+	"SDL_platform.h"
+	<winsdkver.h>
+
+1686311871 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\sdl_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1686311878 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\begin_code.h
+
+1686311878 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\close_code.h
+
+1686311870 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\sdl2\sdl_opengl_glext.h
+	<windows.h>
+	<stddef.h>
+	<inttypes.h>
+	<inttypes.h>
+	<inttypes.h>
+	<stdint.h>
+	<stdint.h>
+	<inttypes.h>
+
+1686311878 p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\include\forms.h
+	"geometry.h"
+	"animation.h"
+
+1686311886 source:p:\documents\polytech app3\projet transverse\projet-transverse-app-3\poussee_archimede\src\geometry.cpp
+	<cmath>
+	"geometry.h"
+

@@ -325,7 +325,7 @@ int main(int argc, char* args[])
 //        forms_list[number_of_forms] = pSphere1;
 //        number_of_forms++;
 
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 5, 1, RED);
+       pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 5, 1, RED);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
@@ -337,11 +337,32 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, .5), 5, 1, RED);
+//        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, .5), 5, 1, RED);
+//        forms_list[number_of_forms] = pFace;
+//        number_of_forms++;
+
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5, -0.5, -0.5), 1, 1, GREEN);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+// Création d'un rectangle comme eau
+        double dim = 0.99 ;
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5, -0.5, -0.5), 1, 1, GREEN);
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
