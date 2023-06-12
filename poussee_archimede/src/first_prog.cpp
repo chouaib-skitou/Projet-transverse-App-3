@@ -273,7 +273,7 @@ int main(int argc, char* args[])
         float lx=0.0f,lz=-1.0f;
 
         double rho = -45;
-        Point camera_position(0, 0, 5.0);
+        Point camera_position(xcam, ycam, zcam);
 
         // The forms to render
         Form* forms_list[MAX_FORMS_NUMBER];
@@ -325,44 +325,44 @@ int main(int argc, char* args[])
 //        forms_list[number_of_forms] = pSphere1;
 //        number_of_forms++;
 
-       pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 5, 1, RED);
+        double agr = 1;
+        // arrière
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 1, 1, GREEN);
+         //coté gauche
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5, -0.5, -0.5), 5, 1, WHITE);
+        // sol
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-//        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, .5), 5, 1, RED);
-//        forms_list[number_of_forms] = pFace;
-//        number_of_forms++;
-
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5, -0.5, -0.5), 1, 1, GREEN);
+        // coté droit
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 // Création d'un rectangle comme eau
-        double dim = 0.99 ;
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
+        double dim = 0.9999 ;
+        // surface arrière
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface gauche
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface basse
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface droite
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
+        // surface de l'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
@@ -385,10 +385,10 @@ int main(int argc, char* args[])
 
         ctrlPoints[(3*6*3)+3*3+1] = 10;
 
-    std::cout<<"ctrlPoints : \n";
-    for (int i = 0; i < 108; i++) {
-        std::cout<<i<<" -> "<<ctrlPoints[i]<<"\n";
-    }
+//    std::cout<<"ctrlPoints : \n";
+//    for (int i = 0; i < 108; i++) {
+//        std::cout<<i<<" -> "<<ctrlPoints[i]<<"\n";
+//    }
 
 
 //        Surface *pSurface = NULL;
@@ -437,18 +437,22 @@ int main(int argc, char* args[])
 
                     case SDLK_o:
                         rho += 5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_p:
                         rho -= 5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_z:
                         ycam += 0.5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_s:
                         ycam -= 0.5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_r:
