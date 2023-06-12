@@ -2,6 +2,9 @@
 #include <SDL2/SDL_opengl.h>
 #include <GL/GLU.h>
 #include "forms.h"
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 
 void Form::update(double delta_t)
@@ -28,21 +31,71 @@ Sphere::Sphere(double r, Color cl)
 }
 
 
+double Sphere::getDensity() const
+{
+    // Remplacez cette valeur par la densité réelle de la sphère
+    return 100.0;
+}
+
+
+
 void Sphere::update(double delta_t)
 {
-    // Complete this part
+    (void)delta_t; // Ignorer le paramètre non utilisé
     this->anim.setPhi(this->anim.getPhi() + 1);
+
+    // Calculer la force de poussée d'Archimède
+    double submerged_volume = 4.0 / 3.0 * M_PI * pow(this->getRadius(), 3);
+    double buoyant_force = submerged_volume * 9.8; // Supposons que la densité de l'eau est 1 et l'accélération gravitationnelle est de 9.8 m/s^2
+
+    // Ajuster la vitesse en fonction de la force de poussée d'Archimède
+    double mass = 4.0 / 3.0 * M_PI * pow(this->getRadius(), 3) * this->getDensity();
+    double acceleration = buoyant_force / mass;
+    this->anim.setSpeed(this->anim.getSpeed() - acceleration); // Inverser le signe pour que l'objet tombe vers le bas
+}
+
+void Sphere::rotate()
+{
+    //glTranslated(1,1,1);
+    glRotated(this->anim.getPhi(), 0, 1, 0) ; //Rotation sur y
+    glRotated(this->anim.getTheta(), 1, 0, 0) ; //Rotation sur x
+}
+
+void Sphere::translation(int axe)
+{
+    //x
+    if (axe == 1){
+        glTranslated(this->anim.getSpeed().x,1,0);
+    }
+
+    //y
+    else if (axe == 2){
+        glTranslated(0.5,this->anim.getSpeed().x,0.5);
+    }
+
+    //z
+    else if (axe == 3){
+        glTranslated(0,0,this->anim.getSpeed().x);
+    }
 }
 
 
 void Sphere::render()
 {
     GLUquadric *quad;
+
     quad = gluNewQuadric();
-    gluQuadricTexture(quad, 0);
-    gluSphere(quad, radius, 100, 100);
-    Form::render();
+
+    // Complete this part
+    Form::render(); //Comme pour Cube_face render, on appelle Form:render
+
+    this->translation(2) ;
+    //this->rotate() ;
+    gluSphere(quad,radius,10,10);
+    //par3 et 4 = nombre de cotés de la forme
+
     gluDeleteQuadric(quad);
+
 }
 
 

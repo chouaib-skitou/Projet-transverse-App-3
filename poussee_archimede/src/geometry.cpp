@@ -8,6 +8,12 @@ void Point::translate(const Vector &v)
     y += v.y;
     z += v.z;
 }
+Point Point::operator+(const Vector& vector) const
+{
+    return Point(x + vector.x, y + vector.y, z + vector.z);
+}
+
+
 
 
 Vector::Vector(Point p1, Point p2)

@@ -232,6 +232,54 @@ void close(SDL_Window** window)
     SDL_Quit();
 }
 
+class FallingObject : public Form
+{
+private:
+    Vector acceleration;
+    Vector velocity;
+    Sphere* sphere; // Pointeur vers la sphère associée à l'objet
+
+public:
+    FallingObject(Point p, Vector accel, Vector speed, double radius, Color col)
+    {
+        anim.setPos(p);
+        acceleration = accel;
+        velocity = speed;
+        sphere = new Sphere(radius, col);
+    }
+
+    void update(double delta_t) override
+    {
+        // Mettez à jour les valeurs de position et de vitesse en fonction de l'accélération
+        Vector delta_v = acceleration.integral(delta_t);
+        anim.setPos(anim.getPos() + velocity.integral(delta_t) + 0.5 * delta_v);anim.setPos(anim.getPos() + velocity.integral(delta_t) + Vector(0.5 * delta_v.x, 0.5 * delta_v.y, 0.5 * delta_v.z));
+        velocity += delta_v;
+
+        // Vérifiez si l'objet est immergé dans l'eau
+        if (anim.getPos().y < 0)
+        {
+            // Calculez la force de poussée d'Archimède
+            double submerged_volume = 4 / 3 * M_PI * pow(sphere->getRadius(), 3);
+            Vector buoyant_force = submerged_volume * Vector(0, 1, 0); // Supposons que la densité de l'eau est 1 et la gravité est vers le bas
+
+            // Ajustez l'accélération en ajoutant la force de poussée d'Archimède
+            acceleration += buoyant_force;
+        }
+    }
+
+    void render() override
+    {
+        sphere->render();
+    }
+
+    ~FallingObject()
+    {
+        delete sphere;
+    }
+};
+
+
+
 
 /***************************************************************************/
 /* MAIN Function                                                           */
@@ -273,7 +321,7 @@ int main(int argc, char* args[])
         float lx=0.0f,lz=-1.0f;
 
         double rho = -45;
-        Point camera_position(0, 0, 5.0);
+        Point camera_position(xcam, ycam, zcam);
 
         // The forms to render
         Form* forms_list[MAX_FORMS_NUMBER];
@@ -325,46 +373,56 @@ int main(int argc, char* args[])
 //        forms_list[number_of_forms] = pSphere1;
 //        number_of_forms++;
 
-       pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 5, 1, RED);
+        double agr = 1;
+        // arrière
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5, -0.5, -0.5), 1, 1, GREEN);
+         //coté gauche
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5, -0.5, -0.5), 5, 1, WHITE);
+        // sol
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-
-//        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5, -0.5, .5), 5, 1, RED);
-//        forms_list[number_of_forms] = pFace;
-//        number_of_forms++;
-
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5, -0.5, -0.5), 1, 1, GREEN);
+        // coté droit
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 // Création d'un rectangle comme eau
-        double dim = 0.99 ;
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
+        double dim = 0.9999 ;
+        // surface arrière
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface gauche
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface basse
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+        // surface droite
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
+//        // surface de l'eau
+//        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+//        forms_list[number_of_forms] = pFace;
+//        number_of_forms++;
+
+
+
+         // Création de deux sphères
+        Sphere* sphere1 = new Sphere(0.25, YELLOW); // Réduction de moitié du rayon
+        sphere1->getAnim().setPos(Point(0, 6, 0));
+        //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
+        forms_list[number_of_forms] = sphere1;
         number_of_forms++;
 
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
 
         int nbPtsCtrlX = 6;
         int nbPtsCtrlZ = 6;
@@ -385,10 +443,10 @@ int main(int argc, char* args[])
 
         ctrlPoints[(3*6*3)+3*3+1] = 10;
 
-    std::cout<<"ctrlPoints : \n";
-    for (int i = 0; i < 108; i++) {
-        std::cout<<i<<" -> "<<ctrlPoints[i]<<"\n";
-    }
+//    std::cout<<"ctrlPoints : \n";
+//    for (int i = 0; i < 108; i++) {
+//        std::cout<<i<<" -> "<<ctrlPoints[i]<<"\n";
+//    }
 
 
 //        Surface *pSurface = NULL;
@@ -437,18 +495,22 @@ int main(int argc, char* args[])
 
                     case SDLK_o:
                         rho += 5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_p:
                         rho -= 5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_z:
                         ycam += 0.5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_s:
                         ycam -= 0.5;
+                        std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
 
                     case SDLK_r:

@@ -14,6 +14,7 @@ public:
 // Constant Colors
 const Color RED(1.0f, 0.0f, 0.0f);
 const Color BLUE(0.0f, 0.0f, 1.0f);
+const Color LIGHT_BLUE(0.0f, 1.0f, 1.0f );
 const Color GREEN(0.0f, 1.0f, 0.0f);
 const Color YELLOW(1.0f, 1.0f, 0.0f);
 const Color WHITE(1.0f, 1.0f, 1.0f);
@@ -40,18 +41,21 @@ public:
 
 
 // A particular Form
-class Sphere : public Form
-{
-private:
-    // The sphere center is aligned with the coordinate system origin
-    // => no center required here, information is stored in the anim object
-    double radius;
-public:
-    Sphere(double r = 1.0, Color cl = Color());
-    double getRadius() const {return radius;}
-    void setRadius(double r) {radius = r;}
-    void update(double delta_t);
-    void render();
+class Sphere : public Form {
+    private:
+        // The sphere center is aligned with the coordinate system origin
+        // => no center required here, information is stored in the anim object
+        double radius; //radius = rayon
+    public:
+        Sphere(double r = 1.0, Color cl = Color());
+        double getRadius() const {return radius;}
+        double getDensity() const;
+        void setRadius(double r) {radius = r;}
+        void update(double delta_t);
+        void render();
+        void rotate() ;
+        void translation(int x) ;
+        void setWater(double width, double height, double depth, double density);
 };
 
 
