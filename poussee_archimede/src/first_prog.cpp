@@ -232,6 +232,54 @@ void close(SDL_Window** window)
     SDL_Quit();
 }
 
+class FallingObject : public Form
+{
+private:
+    Vector acceleration;
+    Vector velocity;
+    Sphere* sphere; // Pointeur vers la sphère associée à l'objet
+
+public:
+    FallingObject(Point p, Vector accel, Vector speed, double radius, Color col)
+    {
+        anim.setPos(p);
+        acceleration = accel;
+        velocity = speed;
+        sphere = new Sphere(radius, col);
+    }
+
+    void update(double delta_t) override
+    {
+        // Mettez à jour les valeurs de position et de vitesse en fonction de l'accélération
+        Vector delta_v = acceleration.integral(delta_t);
+        anim.setPos(anim.getPos() + velocity.integral(delta_t) + 0.5 * delta_v);anim.setPos(anim.getPos() + velocity.integral(delta_t) + Vector(0.5 * delta_v.x, 0.5 * delta_v.y, 0.5 * delta_v.z));
+        velocity += delta_v;
+
+        // Vérifiez si l'objet est immergé dans l'eau
+        if (anim.getPos().y < 0)
+        {
+            // Calculez la force de poussée d'Archimède
+            double submerged_volume = 4 / 3 * M_PI * pow(sphere->getRadius(), 3);
+            Vector buoyant_force = submerged_volume * Vector(0, 1, 0); // Supposons que la densité de l'eau est 1 et la gravité est vers le bas
+
+            // Ajustez l'accélération en ajoutant la force de poussée d'Archimède
+            acceleration += buoyant_force;
+        }
+    }
+
+    void render() override
+    {
+        sphere->render();
+    }
+
+    ~FallingObject()
+    {
+        delete sphere;
+    }
+};
+
+
+
 
 /***************************************************************************/
 /* MAIN Function                                                           */
@@ -361,10 +409,20 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-        // surface de l'eau
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
+//        // surface de l'eau
+//        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+//        forms_list[number_of_forms] = pFace;
+//        number_of_forms++;
+
+
+
+         // Création de deux sphères
+        Sphere* sphere1 = new Sphere(0.25, YELLOW); // Réduction de moitié du rayon
+        sphere1->getAnim().setPos(Point(0, 6, 0));
+        //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
+        forms_list[number_of_forms] = sphere1;
         number_of_forms++;
+
 
         int nbPtsCtrlX = 6;
         int nbPtsCtrlZ = 6;
