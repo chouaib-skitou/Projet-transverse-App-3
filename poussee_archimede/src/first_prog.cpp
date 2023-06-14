@@ -418,7 +418,7 @@ int main(int argc, char* args[])
 
          // Création de deux sphères
         Sphere* sphere1 = new Sphere(0.25, YELLOW); // Réduction de moitié du rayon
-        sphere1->getAnim().setPos(Point(0, 6, 0));
+        sphere1->getAnim().setPos(Point(0, 6, -0.5));
         //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
         forms_list[number_of_forms] = sphere1;
         number_of_forms++;
