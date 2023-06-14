@@ -311,7 +311,7 @@ int main(int argc, char* args[])
         // Camera position
         double xcam = 0;
         double ycam = 0;
-        double zcam = 5;
+        double zcam = 10;
 
         float vitesse = 0.1f; // vitesse de deplacement de la cam�ra
 

@@ -31,29 +31,26 @@ Sphere::Sphere(double r, Color cl)
 }
 
 
-double Sphere::getDensity() const
-{
-    // Remplacez cette valeur par la densité réelle de la sphère
-    return 100.0;
-}
-
 
 
 void Sphere::update(double delta_t)
 {
-    (void)delta_t; // Ignorer le paramètre non utilisé
-    this->anim.setPhi(this->anim.getPhi() + 1);
+    //Complete this part
+    //this->anim.setPhi(this->anim.getPhi() + 1); //Phi = angle azimuth augmente -> rotation sur y
+    this->anim.setSpeed(this->anim.getSpeed() - 0.01); //Phi = angle azimuth augmente -> rotation sur y
+    //this->anim.setAccel(this->anim.getAccel() - 0.01); //Phi = angle azimuth augmente -> rotation sur y
 
-    // Calculer la force de poussée d'Archimède
-    double submerged_volume = 4.0 / 3.0 * M_PI * pow(this->getRadius(), 3);
-    double buoyant_force = submerged_volume * 9.8; // Supposons que la densité de l'eau est 1 et l'accélération gravitationnelle est de 9.8 m/s^2
+    Point ptM=this->anim.getPos(); //Position de l'objet
+    Vector OM(Point(0,0,0),ptM); //Vecteur entre le point et l'origine
+    Vector vit;
+    Vector g(0,-9.81,0);
+    vit = this->anim.getSpeed() + delta_t*g;
+    this->anim.setSpeed(vit);
+    OM = OM + delta_t*this->anim.getSpeed();
+    ptM=Point(OM.x,OM.y,OM.z);
+    this->anim.setPos(ptM);
 
-    // Ajuster la vitesse en fonction de la force de poussée d'Archimède
-    double mass = 4.0 / 3.0 * M_PI * pow(this->getRadius(), 3) * this->getDensity();
-    double acceleration = buoyant_force / mass;
-    this->anim.setSpeed(this->anim.getSpeed() - acceleration); // Inverser le signe pour que l'objet tombe vers le bas
 }
-
 void Sphere::rotate()
 {
     //glTranslated(1,1,1);

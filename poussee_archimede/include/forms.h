@@ -49,7 +49,6 @@ class Sphere : public Form {
     public:
         Sphere(double r = 1.0, Color cl = Color());
         double getRadius() const {return radius;}
-        double getDensity() const;
         void setRadius(double r) {radius = r;}
         void update(double delta_t);
         void render();
