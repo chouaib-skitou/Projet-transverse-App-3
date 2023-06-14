@@ -21,6 +21,7 @@ const Color WHITE(1.0f, 1.0f, 1.0f);
 const Color ORANGE(1.0f, 0.65f, 0.0f);
 
 
+
 // Generic class to render and animate an object
 class Form
 {
@@ -44,7 +45,7 @@ public:
 class Sphere : public Form {
     private:
         // The sphere center is aligned with the coordinate system origin
-        // => no center required here, information is stored in the anim object
+        // => no center requirepd here, information is stored in the anim object
         double radius; //radius = rayon
     public:
         Sphere(double r = 1.0, Color cl = Color());
