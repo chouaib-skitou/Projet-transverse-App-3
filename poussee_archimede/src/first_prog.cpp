@@ -231,6 +231,10 @@ void close(SDL_Window** window)
     //Quit SDL subsystems
     SDL_Quit();
 }
+// Position du cube flottant dans l'eau
+float cube_x = 0.0f;  // Coordonnée x du cube
+float cube_y = -2.0f; // Coordonnée y du cube (hauteur de flottaison)
+float cube_z = 0.0f;  // Coordonnée z du cube
 
 class FallingObject : public Form
 {
@@ -311,7 +315,7 @@ int main(int argc, char* args[])
         // Camera position
         double xcam = 0;
         double ycam = 0;
-        double zcam = 10;
+        double zcam = 5;
 
         float vitesse = 0.1f; // vitesse de deplacement de la cam�ra
 
@@ -375,42 +379,27 @@ int main(int argc, char* args[])
 
         double agr = 1;
         // arrière
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1.2*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
          //coté gauche
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1.2*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
         // sol
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*agr, -0.5*agr, -0.5*agr), 5*agr, 1*agr, WHITE);
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
         // coté droit
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(2.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
+        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1.2*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-// Création d'un rectangle comme eau
-        double dim = 0.9999 ;
-        // surface arrière
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+//         // coté HAUT pour l'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, 0.5*agr, -0.5*agr), 1*agr, 1*agr, LIGHT_BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-        // surface gauche
-        pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, -0.5*dim), 1*dim, 1*dim, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-        // surface basse
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, -0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-        // surface droite
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-2.5*dim, -0.5*dim, 0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-        // surface de l'eau
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+         // AVANT POUR L'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5*agr, -0.5*agr, 0.5*agr), 1*agr, 1*agr, LIGHT_BLUE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
@@ -418,7 +407,7 @@ int main(int argc, char* args[])
 
          // Création de deux sphères
         Sphere* sphere1 = new Sphere(0.25, YELLOW); // Réduction de moitié du rayon
-        sphere1->getAnim().setPos(Point(0, 6, -0.5));
+        sphere1->getAnim().setPos(Point(-0.5, 6, -0.5));
         //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
         forms_list[number_of_forms] = sphere1;
         number_of_forms++;
@@ -512,6 +501,22 @@ int main(int argc, char* args[])
                         ycam -= 0.5;
                         std::cout<< "Pos Cam :  "<<xcam <<" "<< ycam <<" "<< zcam<<"\n";
                         break;
+                    case SDLK_u:
+                        xcam = cube_x;// Position x de la caméra alignée avec le cube
+                        break;
+
+                    case SDLK_i:
+                        ycam = cube_y + 5.0f; // Position y de la caméra au-dessus du cube
+                        break;
+
+                   case SDLK_j://zoom -
+                        zcam = cube_z - 10.0f; // Position z de la caméra derrière le cube
+                        break;
+
+                 case SDLK_m:
+                      rho = 0.0f;// Angle de rotation autour de l'axe vertical désactivé
+                        break;
+
 
                     case SDLK_r:
                         ycam = 0;

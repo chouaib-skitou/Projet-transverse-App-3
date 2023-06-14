@@ -1,14 +1,15 @@
 #ifndef FORMS_H_INCLUDED
 #define FORMS_H_INCLUDED
-
 #include "geometry.h"
 #include "animation.h"
+
+
 
 class Color
 {
 public:
-    float r, g, b;
-    Color(float rr = 1.0f, float gg = 1.0f, float bb = 1.0f) {r=rr; g=gg; b=bb;}
+    float r, g, b, t;
+    Color(float rr = 1.0f, float gg = 1.0f, float bb = 1.0f, float tt = 0.0f) {r=rr; g=gg; b=bb;t=tt;}
 };
 
 // Constant Colors
@@ -19,6 +20,9 @@ const Color GREEN(0.0f, 1.0f, 0.0f);
 const Color YELLOW(1.0f, 1.0f, 0.0f);
 const Color WHITE(1.0f, 1.0f, 1.0f);
 const Color ORANGE(1.0f, 0.65f, 0.0f);
+const Color WATER_TRANSPARENT(0.0f, 1.0f, 1.0f, 0.5f);
+
+
 
 
 
