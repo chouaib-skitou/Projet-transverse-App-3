@@ -19,7 +19,7 @@ const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 1080;
 
 // Max number of forms : static allocation
-const int MAX_FORMS_NUMBER = 10;
+const int MAX_FORMS_NUMBER = 11;
 
 // Animation actualization delay (in ms) => 100 updates per second
 const Uint32 ANIM_DELAY = 10;
@@ -409,10 +409,10 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
 
-//        // surface de l'eau
-//        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
-//        forms_list[number_of_forms] = pFace;
-//        number_of_forms++;
+        // surface de l'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-2.5*dim, 0.5*dim, -0.5*dim), 5*dim, 1*dim, LIGHT_BLUE);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
 
 
 

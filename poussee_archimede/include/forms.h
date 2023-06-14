@@ -44,7 +44,7 @@ public:
 class Sphere : public Form {
     private:
         // The sphere center is aligned with the coordinate system origin
-        // => no center required here, information is stored in the anim object
+        // => no center requirepd here, information is stored in the anim object
         double radius; //radius = rayon
     public:
         Sphere(double r = 1.0, Color cl = Color());
