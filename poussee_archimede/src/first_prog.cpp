@@ -452,6 +452,7 @@ int main(int argc, char* args[])
             while(SDL_PollEvent(&event) != 0)
             {
                 int x = 0, y = 0;
+                float zoomFactor = 2.0f;
                 SDL_Keycode key_pressed = event.key.keysym.sym;
 
                 switch(event.type)
@@ -516,6 +517,25 @@ int main(int argc, char* args[])
                  case SDLK_m:
                       rho = 0.0f;// Angle de rotation autour de l'axe vertical désactivé
                         break;
+
+                case SDLK_k:
+                    zoomFactor += 0.1f;
+                    break;
+
+                   case SDLK_l:
+                    zoomFactor -= 0.1f;
+                    if (zoomFactor < 0.1f) zoomFactor = 0.1f; // Limite le zoom minimum
+                    break;
+
+                case SDLK_n:
+                    xcam += lx * vitesse * zoomFactor;
+                    zcam += lz * vitesse * zoomFactor;
+                break;
+
+                case SDLK_v:
+                    xcam -= lx * vitesse * zoomFactor;
+                    zcam -= lz * vitesse * zoomFactor;
+                break;
 
 
                     case SDLK_r:
