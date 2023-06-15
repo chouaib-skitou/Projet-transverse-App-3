@@ -56,6 +56,8 @@ class Sphere : public Form {
         double getRadius() const {return radius;}
         void setRadius(double r) {radius = r;}
         void update(double delta_t);
+        double getVolume();
+        double getMass();
         void render();
         void rotate() ;
         void translation(int x) ;
