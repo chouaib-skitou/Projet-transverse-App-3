@@ -15,8 +15,8 @@
 /* Constants and functions declarations                                    */
 /***************************************************************************/
 // Screen dimension constants
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1080;
+const int SCREEN_WIDTH = 950;
+const int SCREEN_HEIGHT = 750;
 
 // Max number of forms : static allocation
 const int MAX_FORMS_NUMBER = 11;
