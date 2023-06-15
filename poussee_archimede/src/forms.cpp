@@ -42,7 +42,7 @@ double Sphere::getMass() {
 
 void Sphere::update(double delta_t) {
 
-    double dim = 0.5;
+    double dim = 1.0;
     double waterLevel = 0.5 * dim;
     double sphereBottom = this->anim.getPos().y - this->radius;
 
@@ -79,7 +79,11 @@ void Sphere::update(double delta_t) {
         double densityWater = 1000; // en kg/m^3
         Vector buoyancyForce(0, -densityWater * submergedVolume * 9.81, 0);
         Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
-        Vector totalForce = buoyancyForce + this->getMass() * g;
+
+        double dragCoefficient =    1.7; // Vous pouvez ajuster cette valeur pour obtenir le comportement souhaité
+        Vector dragForce = -dragCoefficient * this->anim.getSpeed();
+
+        Vector totalForce = buoyancyForce + this->getMass() * g + dragForce;
         double mass = this->getMass();
         Vector acceleration(totalForce.x / mass, totalForce.y / mass, totalForce.z / mass);
 
@@ -208,15 +212,20 @@ void Cube_face::update(double delta_t)
 
 void Cube_face::render()
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Point p1 = Point();
     Point p2 = p1, p3, p4 = p1;
-    p2.translate(length*vdir1);
+    p2.translate(length * vdir1);
     p3 = p2;
-    p3.translate(width*vdir2);
-    p4.translate(width*vdir2);
+    p3.translate(width * vdir2);
+    p4.translate(width * vdir2);
 
     Form::render();
 
+    // Render the Cube_face with transparency
+    glColor4f(col.r, col.g, col.b, col.t);
     glBegin(GL_QUADS);
     {
         glVertex3d(p1.x, p1.y, p1.z);
@@ -225,7 +234,10 @@ void Cube_face::render()
         glVertex3d(p4.x, p4.y, p4.z);
     }
     glEnd();
+
+    glDisable(GL_BLEND);
 }
+
 
 Surface::Surface(GLfloat *points, int nbPointsX, int nbPointsZ)
 {

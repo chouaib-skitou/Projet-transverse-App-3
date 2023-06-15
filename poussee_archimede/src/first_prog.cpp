@@ -41,6 +41,7 @@ void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos);
 void close(SDL_Window** window);
 
 
+
 /***************************************************************************/
 /* Functions implementations                                               */
 /***************************************************************************/
@@ -126,6 +127,7 @@ bool initGL()
     glEnable(GL_DEPTH_TEST);
 
 
+
     // Lighting basic configuration and activation
     const GLfloat light_ambient[]  = { 0.3f, 0.3f, 0.3f, 1.0f };
     const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -182,6 +184,7 @@ void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos, double deg)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Initialize Modelview Matrix
+    glLineWidth(5);
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
@@ -376,6 +379,7 @@ int main(int argc, char* args[])
 //        pSphere1 = new Sphere(1, BLUE);
 //        forms_list[number_of_forms] = pSphere1;
 //        number_of_forms++;
+        glEnable(GL_BLEND);
 
         double agr = 1;
         // arrière
@@ -394,23 +398,28 @@ int main(int argc, char* args[])
         pFace = new Cube_face(Vector(0,0,1), Vector(0,1,0), Point(0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1.2*agr, WHITE);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
-//         // coté HAUT pour l'eau
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, 0.5*agr, -0.5*agr), 1*agr, 1*agr, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-         // AVANT POUR L'eau
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5*agr, -0.5*agr, 0.5*agr), 1*agr, 1*agr, LIGHT_BLUE);
-        forms_list[number_of_forms] = pFace;
-        number_of_forms++;
-
-
 
          // Création de deux sphères
-        Sphere* sphere1 = new Sphere(0.25, YELLOW); // Réduction de moitié du rayon
+        Sphere* sphere1 = new Sphere(0.25, ORANGE); // Réduction de moitié du rayon
         sphere1->getAnim().setPos(Point(-0.5, 6, -0.5));
         //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
         forms_list[number_of_forms] = sphere1;
         number_of_forms++;
+
+
+//         // coté HAUT pour l'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, 0.5*agr, -0.5*agr), 1*agr, 1*agr,WATER_TRANSPARENT);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+         // AVANT POUR L'eau
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5*agr, -0.5*agr, 0.5*agr), 1*agr, 1*agr, WATER_TRANSPARENT);
+        forms_list[number_of_forms] = pFace;
+        number_of_forms++;
+
+
+
+
+
 
 
         int nbPtsCtrlX = 6;
