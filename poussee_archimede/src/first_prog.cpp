@@ -194,7 +194,7 @@ void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos, double deg)
                     0.0f, 1.0f,  0.0f);
     // Isometric view
     glRotated(deg, 0, 1, 0);
-    glRotated(30, 1, 0, -1);
+//    glRotated(30, 1, 0, -1);
 
     // X, Y and Z axis
     glPushMatrix(); // Preserve the camera viewing point for further forms
