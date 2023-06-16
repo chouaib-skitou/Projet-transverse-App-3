@@ -34,14 +34,17 @@ double Sphere::getVolume() {
     double pi = 3.141592653589793;
     return (4.0/3.0) * pi * pow(this->radius, 3);
 }
+double Sphere::getDensity() {
+    double density = 10000.0; // densité de la sphère, en kg/m^3
+    return density;
+}
 
 double Sphere::getMass() {
-    double rho = 1000.0; // densité de la sphère, en kg/m^3
+    double rho = this->getDensity(); // densité de la sphère, en kg/m^3
     return rho * this->getVolume();
 }
 
 void Sphere::update(double delta_t) {
-
     double dim = 0.9;
     double waterLevel = 0.5 * dim;
     double sphereBottom = this->anim.getPos().y - this->radius;
@@ -51,59 +54,132 @@ void Sphere::update(double delta_t) {
 
     // Vérifier si la sphère est au-dessus de la surface de l'eau
     if (sphereBottom > waterLevel) {
-        Point ptM=this->anim.getPos(); //Position de l'objet
-        Vector OM(Point(0,0,0),ptM); //Vecteur entre la position de l'objet et sa
-        Vector vit; //Vecteur vitesse
-        Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
+        Point ptM = this->anim.getPos(); // Position de l'objet
+        Vector OM(Point(0, 0, 0), ptM); // Vecteur entre la position de l'objet et sa
+        Vector vit; // Vecteur vitesse
+        Vector g(0, -9.81, 0); // Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
 
-        //Calcul du vecteur vitesse :
-        //delta_t = intervalle de temps donc sa position dans delta secondes
-        //g = Vecteur g : Acceleration due à la gravité
-        vit = this->anim.getSpeed() + delta_t*g;
-        //cout << this->anim.getSpeed() << "\n" ;
+        // Calcul du vecteur vitesse :
+        // delta_t = intervalle de temps donc sa position dans delta secondes
+        // g = Vecteur g : Acceleration due à la gravité
+        vit = this->anim.getSpeed() + delta_t * g;
+        this->anim.setSpeed(vit); // Attribution de la vitesse
 
-        this->anim.setSpeed(vit); //Attribution de la vitesse
-
-        //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
-        OM = OM + delta_t*this->anim.getSpeed();
-        //cout << OM << "\n" ;
-        ptM=Point(OM.x,OM.y,OM.z);
-        this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
-
-
+        // Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
+        OM = OM + delta_t * this->anim.getSpeed();
+        ptM = Point(OM.x, OM.y, OM.z);
+        this->anim.setPos(ptM); // Mise a jour de la position du centre de la sphere
     } else if (distance <= 0) {
-
         // La sphère touche ou est sous la surface de l'eau
         double submergedPortion = std::min(std::max((waterLevel - sphereBottom) / (2 * this->radius), 0.0), 1.0);
         double submergedVolume = this->getVolume() * submergedPortion;
         double densityWater = 1000; // en kg/m^3
+        double densitySphere = this->getDensity(); // Densité de la sphère
+        double weight = densitySphere * submergedVolume * 9.81; // Force de poids
+
         Vector buoyancyForce(0, -densityWater * submergedVolume * 9.81, 0);
-        Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
+        Vector g(0, -9.81, 0); // Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
 
-        double dragCoefficient =    1.0; // On peut ajuster cette valeur pour obtenir le comportement souhaité
-        Vector dragForce = -dragCoefficient * this->anim.getSpeed();
-
-        Vector totalForce = buoyancyForce + this->getMass() * g + dragForce;
+        Vector totalForce = buoyancyForce + weight * g * 0.9; // Force totale incluant le poids
         double mass = this->getMass();
+
         Vector acceleration(totalForce.x / mass, totalForce.y / mass, totalForce.z / mass);
 
-        Vector vit = this->anim.getSpeed() - delta_t*acceleration;
+        Vector vit = this->anim.getSpeed() - delta_t * acceleration;
         this->anim.setSpeed(vit);
 
-        //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
-        Point ptM=this->anim.getPos();
-        Vector OM(Point(0,-0.01,0),ptM);
-        OM = OM + delta_t*this->anim.getSpeed();
-        ptM=Point(OM.x,OM.y,OM.z);
-        this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
+        // Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
+        Point ptM = this->anim.getPos();
+        Vector OM(Point(0, -0.01, 0), ptM);
+        OM = OM + delta_t * this->anim.getSpeed();
+        ptM = Point(OM.x, OM.y, OM.z);
+        this->anim.setPos(ptM); // Mise a jour de la position du centre de la sphere
 
         // Si la sphère est complètement sous l'eau, arrêter la chute en fixant la vitesse à zéro
         if (submergedPortion == 1.0) {
             this->anim.setSpeed(Vector(0, 0, 0));
         }
     }
-
 }
+//
+//void Sphere::update(double delta_t) {
+//
+//    double dim = 1.0;
+//    double waterLevel = 0.5 * dim;
+//    double sphereBottom = this->anim.getPos().y - this->radius;
+//
+//    // Calcul de la distance entre le centre de la sphère et la surface
+//    double distance = this->anim.getPos().y - (waterLevel + this->radius);
+//
+//    // Vérifier si la sphère est au-dessus de la surface de l'eau
+//    if (sphereBottom > waterLevel) {
+//        Point ptM=this->anim.getPos(); //Position de l'objet
+//        Vector OM(Point(0,0,0),ptM); //Vecteur entre la position de l'objet et sa
+//        Vector vit; //Vecteur vitesse
+//        Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
+//
+//        //Calcul du vecteur vitesse :
+//        //delta_t = intervalle de temps donc sa position dans delta secondes
+//        //g = Vecteur g : Acceleration due à la gravité
+//        vit = this->anim.getSpeed() + delta_t*g;
+//        //cout << this->anim.getSpeed() << "\n" ;
+//
+//        this->anim.setSpeed(vit); //Attribution de la vitesse
+//
+//        //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
+//        OM = OM + delta_t*this->anim.getSpeed();
+//        //cout << OM << "\n" ;
+//        ptM=Point(OM.x,OM.y,OM.z);
+//        this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
+//
+//
+//    } else if (distance <= 0) {
+//
+//        // La sphère touche ou est sous la surface de l'eau
+//        double submergedPortion = std::min(std::max((waterLevel - sphereBottom) / (2 * this->radius), 0.0), 1.0);
+//        double submergedVolume = this->getVolume() * submergedPortion;
+//        double densityWater = 1000; // en kg/m^3
+//        Vector buoyancyForce(0, -densityWater * submergedVolume * 9.81, 0); //Calcul de la flotabilité
+//        Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
+//
+//        double dragCoefficient = 1.7; // Vous pouvez ajuster cette valeur pour obtenir le comportement souhaité
+//        Vector dragForce = -dragCoefficient * this->anim.getSpeed();
+//
+//        Vector totalForce = buoyancyForce + this->getMass() * g + dragForce;
+//        double mass = this->getMass();
+//        Vector acceleration(totalForce.x / mass, totalForce.y / mass, totalForce.z / mass);
+//        //L'accélération d'un objet sur laquelle agit une force est directement proportionnelle
+//        //à la force agissant sur l'objet et à la masse de l'objet.
+//
+//
+//        Vector vit = this->anim.getSpeed() - delta_t*acceleration; //attribution de la vitesse
+//
+//        this->anim.setSpeed(vit);
+//
+//
+//
+//        //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
+//        Point ptM=this->anim.getPos();
+//        Vector OM(Point(0,0,0),ptM);
+//        OM = OM + delta_t*this->anim.getSpeed();
+//        ptM=Point(OM.x,OM.y,OM.z);
+//        this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
+//
+//        // Si la sphère est complètement sous l'eau, arrêter la chute en fixant la vitesse à zéro
+//        if (submergedPortion == 1.0) {
+//
+//
+//            //vit = vit - 0.1 * vit ;
+//            this->anim.setSpeed(Vector(0, 0, 0));
+//
+//
+//
+//        }
+//    }
+//
+//}
+
+
 
 
 
