@@ -36,13 +36,13 @@ double Sphere::getVolume() {
 }
 
 double Sphere::getMass() {
-    double rho = 1000000.0; // densité de la sphère, en kg/m^3
+    double rho = 1000.0; // densité de la sphère, en kg/m^3
     return rho * this->getVolume();
 }
 
 void Sphere::update(double delta_t) {
 
-    double dim = 1.0;
+    double dim = 0.9;
     double waterLevel = 0.5 * dim;
     double sphereBottom = this->anim.getPos().y - this->radius;
 
@@ -80,7 +80,7 @@ void Sphere::update(double delta_t) {
         Vector buoyancyForce(0, -densityWater * submergedVolume * 9.81, 0);
         Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
 
-        double dragCoefficient =    1.7; // Vous pouvez ajuster cette valeur pour obtenir le comportement souhaité
+        double dragCoefficient =    1.0; // On peut ajuster cette valeur pour obtenir le comportement souhaité
         Vector dragForce = -dragCoefficient * this->anim.getSpeed();
 
         Vector totalForce = buoyancyForce + this->getMass() * g + dragForce;
@@ -92,7 +92,7 @@ void Sphere::update(double delta_t) {
 
         //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
         Point ptM=this->anim.getPos();
-        Vector OM(Point(0,0,0),ptM);
+        Vector OM(Point(0,-0.01,0),ptM);
         OM = OM + delta_t*this->anim.getSpeed();
         ptM=Point(OM.x,OM.y,OM.z);
         this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
@@ -104,45 +104,6 @@ void Sphere::update(double delta_t) {
     }
 
 }
-
-
-
-//void Sphere::update(double delta_t) {
-//
-//    double dim = 0.5;
-//    double waterLevel = 0.5 * dim;
-//    double sphereBottom = this->anim.getPos().y - this->radius;
-//
-//    // Calcul de la distance entre le centre de la sphère et la surface
-//    double distance = this->anim.getPos().y - (waterLevel + this->radius);
-//
-//    // Vérifier si la sphère est au-dessus de la surface de l'eau
-//    if (sphereBottom > waterLevel) {
-//        Point ptM=this->anim.getPos(); //Position de l'objet
-//        Vector OM(Point(0,0,0),ptM); //Vecteur entre la position de l'objet et sa
-//        Vector vit; //Vecteur vitesse
-//        Vector g(0,-9.81,0); //Sur l'axe y, -9.81 qui est le vecteur g soit la pesanteur
-//
-//        //Calcul du vecteur vitesse :
-//        //delta_t = intervalle de temps donc sa position dans delta secondes
-//        //g = Vecteur g : Acceleration due à la gravité
-//        vit = this->anim.getSpeed() + delta_t*g;
-//        //cout << this->anim.getSpeed() << "\n" ;
-//
-//        this->anim.setSpeed(vit); //Attribution de la vitesse
-//
-//        //Au vecteur OM, de positionnement on donne la vitesse pour la nouvelle position
-//        OM = OM + delta_t*this->anim.getSpeed();
-//        //cout << OM << "\n" ;
-//        ptM=Point(OM.x,OM.y,OM.z);
-//        this->anim.setPos(ptM); //Mise a jour de la position du centre de la sphere
-//
-//
-//    } else if (distance <= 0) {
-//        // La sphère touche la surface de l'eau, arrêter la chute en fixant la vitesse à zéro
-////        this->anim.setSpeed(Vector(0, 0, 0));
-//
-//}
 
 
 
@@ -183,7 +144,7 @@ void Sphere::render()
 
     this->translation(2) ;
     //this->rotate() ;
-    gluSphere(quad,radius,10,10);
+    gluSphere(quad,radius,1000,1000);
     //par3 et 4 = nombre de cotés de la forme
 
     gluDeleteQuadric(quad);

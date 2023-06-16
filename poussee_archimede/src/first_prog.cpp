@@ -63,7 +63,7 @@ bool init(SDL_Window** window, SDL_GLContext* context)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
         // Create window
-        *window = SDL_CreateWindow( "TP intro OpenGL / SDL 2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        *window = SDL_CreateWindow( "Projet-transverse - Poussée d'Archimède", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
         if( *window == NULL )
         {
             std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
@@ -239,51 +239,6 @@ float cube_x = 0.0f;  // Coordonnée x du cube
 float cube_y = -2.0f; // Coordonnée y du cube (hauteur de flottaison)
 float cube_z = 0.0f;  // Coordonnée z du cube
 
-class FallingObject : public Form
-{
-private:
-    Vector acceleration;
-    Vector velocity;
-    Sphere* sphere; // Pointeur vers la sphère associée à l'objet
-
-public:
-    FallingObject(Point p, Vector accel, Vector speed, double radius, Color col)
-    {
-        anim.setPos(p);
-        acceleration = accel;
-        velocity = speed;
-        sphere = new Sphere(radius, col);
-    }
-
-    void update(double delta_t) override
-    {
-        // Mettez à jour les valeurs de position et de vitesse en fonction de l'accélération
-        Vector delta_v = acceleration.integral(delta_t);
-        anim.setPos(anim.getPos() + velocity.integral(delta_t) + 0.5 * delta_v);anim.setPos(anim.getPos() + velocity.integral(delta_t) + Vector(0.5 * delta_v.x, 0.5 * delta_v.y, 0.5 * delta_v.z));
-        velocity += delta_v;
-
-        // Vérifiez si l'objet est immergé dans l'eau
-        if (anim.getPos().y < 0)
-        {
-            // Calculez la force de poussée d'Archimède
-            double submerged_volume = 4 / 3 * M_PI * pow(sphere->getRadius(), 3);
-            Vector buoyant_force = submerged_volume * Vector(0, 1, 0); // Supposons que la densité de l'eau est 1 et la gravité est vers le bas
-
-            // Ajustez l'accélération en ajoutant la force de poussée d'Archimède
-            acceleration += buoyant_force;
-        }
-    }
-
-    void render() override
-    {
-        sphere->render();
-    }
-
-    ~FallingObject()
-    {
-        delete sphere;
-    }
-};
 
 
 
@@ -327,7 +282,8 @@ int main(int argc, char* args[])
         // vecteur repr�sentant la direction de la cam�ra
         float lx=0.0f,lz=-1.0f;
 
-        double rho = -45;
+//        double rho = -45;
+        double rho = 0;
         Point camera_position(xcam, ycam, zcam);
 
         // The forms to render
@@ -391,7 +347,7 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
         // sol
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, WHITE);
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, -0.5*agr, -0.5*agr), 1*agr, 1*agr, BLACK);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
         // coté droit
@@ -400,7 +356,7 @@ int main(int argc, char* args[])
         number_of_forms++;
 
          // Création de deux sphères
-        Sphere* sphere1 = new Sphere(0.25, ORANGE); // Réduction de moitié du rayon
+        Sphere* sphere1 = new Sphere(0.2, ORANGE); // Réduction de moitié du rayon
         sphere1->getAnim().setPos(Point(-0.5, 6, -0.5));
         //sphere1->getAnim().setPos(Point(0.5, 0.5, 0.5));
         forms_list[number_of_forms] = sphere1;
@@ -408,7 +364,7 @@ int main(int argc, char* args[])
 
 
 //         // coté HAUT pour l'eau
-        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, 0.5*agr, -0.5*agr), 1*agr, 1*agr,WATER_TRANSPARENT);
+        pFace = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5*agr, 0.5*agr, -0.5*agr), 1*agr, 1*agr,DARK_BLUE_TRANSPARENT);
         forms_list[number_of_forms] = pFace;
         number_of_forms++;
          // AVANT POUR L'eau
@@ -457,15 +413,18 @@ int main(int argc, char* args[])
         // While application is running
         while(!quit)
         {
+            float angleY = 0.0f; // Initialiser à 0
             // Handle events on queue
             while(SDL_PollEvent(&event) != 0)
             {
                 int x = 0, y = 0;
                 float zoomFactor = 2.0f;
+
                 SDL_Keycode key_pressed = event.key.keysym.sym;
 
                 switch(event.type)
                 {
+
                 // User requests quit
                 case SDL_QUIT:
                     quit = true;
@@ -476,6 +435,10 @@ int main(int argc, char* args[])
 
                     switch(key_pressed)
                     {
+
+
+
+
                     // Quit the program when 'q' or Escape keys are pressed
 
                     case SDLK_ESCAPE:

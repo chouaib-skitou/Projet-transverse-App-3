@@ -15,12 +15,17 @@ public:
 // Constant Colors
 const Color RED(1.0f, 0.0f, 0.0f);
 const Color BLUE(0.0f, 0.0f, 1.0f);
-const Color LIGHT_BLUE(0.0f, 1.0f, 1.0f );
+const Color BLACK(0.0f, 0.0f, 0.0f, 1.0f);
+const Color LIGHT_BLUE(0.0f, 1.0f, 0.7f,0.5f );
 const Color GREEN(0.0f, 1.0f, 0.0f);
 const Color YELLOW(1.0f, 1.0f, 0.0f);
 const Color WHITE(1.0f, 1.0f, 1.0f,1.0f);
 const Color ORANGE(1.0f, 0.65f, 0.0f);
 const Color WATER_TRANSPARENT(0.0f, 1.0f, 1.0f, 0.5f);
+const Color DARK_BLUE_TRANSPARENT(0.0f, 0.7f, 1.0f, 0.5f);
+
+
+
 
 
 
