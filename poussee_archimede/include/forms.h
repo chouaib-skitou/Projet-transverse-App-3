@@ -62,6 +62,7 @@ class Sphere : public Form {
         void setRadius(double r) {radius = r;}
         void update(double delta_t);
         double getVolume();
+        double getDensity();
         double getMass();
         void render();
         void rotate() ;
